@@ -1,73 +1,76 @@
 
-console.log("js console");
+#grid-container {
+           display: grid;
+           grid-template-columns: repeat(3, 1fr);
+           gap: 20px;
+           padding: 20px;
+       }
+       .card {
+           border: 1px solid #ddd;
+           border-radius: 8px;
+           padding: 10px;
+           background-size: cover;
+           background-position: center;
+           color: white;
+           text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+           height: 400px;
+           display: flex;
+           flex-direction: column;
+           justify-content: flex-end;
+       }
+       .movie-title {
+           font-size: 1.5em;
+           font-weight: bold;
+           margin-bottom: 8px;
+       }
+       .movie-year, .movie-cast, .movie-genres {
+           margin-bottom: 4px;
+       }
 
-let data;
-let grid = document.querySelector(".grid-container");
 
-var xhttp = new XMLHtppRequest();
-
-xhttp.onreadystatechange = function() {
-if (this.readyState == 4 &&this.status ==200){
-
-     data = JSON.parse(xhttp.responseText);
-     console.log(data);
+const req = new XMLHttpRequest();
 
 
-     data.forEach(function(game){
-     let card = document.createElement("div");
-     card.classList.add("card");
+req.onreadystatechange = function() {
+   if (req.readyState === 4 && req.status === 200) {
+       let movies = JSON.parse(req.responseText);
+       console.log(movies[1].year);
 
-     let textData = 
 
-     "<div class='game=title'>"+ game.title + "</div>" +
-     "<span>" +
-     "Publisher:" + game.publisher + "<br>" +
-     "Release Date:" + game.releaseDate + "<br>" + 
-     "Needs Research:" + 
-     "</span>";
+       const gridContainer = document.getElementById('grid-container');
 
-     card.innerHTML = textData;
 
-    if(game.imgSrc) {
+       movies.forEach(function(movie) {
+           let card = document.createElement("div");
+           card.classList.add("card");
 
-        card.style.backgroundImage = "url("+game.imgSrc + ")";
-    }
-    grid.appendChild(card);
-     });
 
+           let castList = movie.cast.join(', ')
+           let genresList = movie.genres.join(', ')
+
+
+           let textData =
+               "<div class='movie-title'>" + movie.title + "</div>" +
+               "<div class='movie-year'>Released: " + movie.year + "</div>" +
+               "<div class='movie-cast'>Cast: " + castList + "</div>" +
+               "<div class='movie-genres'>Genres: " + genresList + "</div>";
+
+
+           card.innerHTML = textData;
+
+
+           if (movie.thumbnail) {
+               card.style.backgroundImage = "url(" + movie.thumbnail + ")";
+           }
+
+
+           gridContainer.appendChild(card);
+       });
+   }
 }
-};
-
-xhttp.open("GET","gamedata.json",true);
-xhttp.send()
 
 
+req.open("GET", "movieList.json", true);
+req.send();
 
 
-
-
-
-
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    fetch("list.json")
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (movies) {
-            const ul = document.getElementById("movie-list");
-
-            movies.forEach(function (movie) {
-                const li = document.createElement("li");
-                li.textContent = movie.title + " (" + movie.year + ")";
-                ul.appendChild(li);
-            });
-        })
-        .catch(function (error) {
-            console.error("Error loading JSON:", error);
-        });
-
-});
