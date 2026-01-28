@@ -1,4 +1,5 @@
 // Function to create and display a movie card
+function createMovieCard(movie) {// Function to create and display a movie card
 function createMovieCard(movie) {
     let card = document.createElement("div");
     card.classList.add("card");
@@ -157,12 +158,4 @@ window.addEventListener('DOMContentLoaded', function() {
         // Clear the flag after loading
         localStorage.removeItem('loadMode');
     }
-});// const save = document.getElementById('save');
-// save.addEventListener('click', function() {
-//  //WIP
-// });
-// Load movies when page loads
-window.addEventListener('DOMContentLoaded', function() {
-    loadJSONMovies();
-    loadCustomMovies();
 });
